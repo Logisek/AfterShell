@@ -144,20 +144,6 @@ build-and-run.bat --help
 
 ---
 
-## Roadmap
-
-Planned tools for future releases:
-
-- [ ] **Browser Data Extractor** - Extract saved passwords, cookies, and browsing history
-- [ ] **Credential Harvester** - Dump cached credentials from Windows Credential Manager
-- [ ] **Network Mapper** - Enumerate network shares and accessible resources
-- [ ] **Process Hollowing Loader** - Stealthy payload execution
-- [ ] **Keylogger Module** - Capture keystrokes with clipboard monitoring
-- [ ] **Screenshot Capture** - Periodic or on-demand screen capture
-- [ ] **File Search** - Search for sensitive files (documents, keys, configs)
-
----
-
 ## Legal Disclaimer
 
 This toolkit is intended for authorized security testing and research purposes only. Users are responsible for ensuring they have proper authorization before using these tools against any systems. The authors assume no liability for misuse of this software.
