@@ -1,0 +1,11 @@
+## Roadmap
+
+Potential Planned tools for future releases:
+
+- [ ] **Browser Data Extractor** - Extract saved passwords, cookies, and browsing history
+- [ ] **Credential Harvester** - Dump cached credentials from Windows Credential Manager
+- [ ] **Network Mapper** - Enumerate network shares and accessible resources
+- [ ] **Screenshot Capture** - Periodic or on-demand screen capture
+- [ ] **File Search** - Search for sensitive files (documents, keys, configs)
+
+---
