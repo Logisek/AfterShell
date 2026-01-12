@@ -2,30 +2,6 @@
 
 This directory contains post-exploitation data exfiltration tools for Windows environments.
 
-## Project Structure
-
-```
-exfil/
-├── OutlookExporter/              # Outlook Data Exporter
-│   ├── OutlookExporter.cs
-│   ├── OutlookExporter.csproj
-│   ├── README.md
-│   ├── build-outlookexporter.bat
-│   └── build-and-run-outlookexporter.bat
-├── ScreenCapture/                # Screen Capture Utility
-│   ├── ScreenCapture.cs
-│   ├── ScreenCapture.csproj
-│   ├── README.md
-│   ├── build-screencapture.bat
-│   └── build-and-run-screencapture.bat
-├── build-all.bat                 # Build all projects
-├── build-and-run-all.bat         # Build & run all projects
-├── SINGLE_FILE_BUILD.md          # Single-file build guide
-└── README.md                     # This file
-```
-
----
-
 # Outlook Data Exporter (C#)
 
 This is a C# console application that exports contacts and email recipients from Microsoft Outlook to CSV or JSON format.
