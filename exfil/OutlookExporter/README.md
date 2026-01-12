@@ -1,12 +1,42 @@
-# AfterShell Exfiltration Tools
+# Outlook Data Exporter
 
-This directory contains post-exploitation data exfiltration tools for Windows environments.
+A native C# console application that exports contacts and email recipients from Microsoft Outlook to CSV or JSON format. Part of the AfterShell post-exploitation toolkit.
 
-# Outlook Data Exporter (C#)
+> **✨ Standalone Executable**: This application builds as a single-file executable with no DLL dependencies. Just copy the .exe and run it anywhere on Windows x64 systems.
 
-This is a C# console application that exports contacts and email recipients from Microsoft Outlook to CSV or JSON format.
+## 🚀 Quick Start
 
-**Location:** `exfil/OutlookExporter/`
+### Get Started in 30 Seconds
+
+**1. Build the Application**
+
+```bash
+cd C:\Dev\AfterShell\exfil\OutlookExporter
+build-outlookexporter.bat
+```
+
+**2. Export Your First Data**
+
+```bash
+# Export all contacts to CSV (default)
+bin\Release\net8.0-windows\win-x64\publish\OutlookExporter.exe
+
+# Output: outlook_contacts_YYYYMMDD_HHMMSS.csv in current directory
+```
+
+### Quick Reference
+
+| Task | Command |
+|------|---------|
+| Export contacts to CSV | `OutlookExporter.exe` |
+| Export to JSON | `OutlookExporter.exe --json` |
+| Export to both formats | `OutlookExporter.exe --csv --json` |
+| Display as matrix | `OutlookExporter.exe --matrix` |
+| List contact folders | `OutlookExporter.exe --list` |
+| Export recipients | `OutlookExporter.exe --recipients --limit 100` |
+| List accounts | `OutlookExporter.exe --list-accounts` |
+
+---
 
 ## Features
 
@@ -30,21 +60,22 @@ This is a C# console application that exports contacts and email recipients from
 
 ## Building the Application
 
-> **✨ Standalone Executables**: Both applications now build as single-file executables with no DLL dependencies. See [SINGLE_FILE_BUILD.md](SINGLE_FILE_BUILD.md) for details.
+> **Note**: This project is configured to build as a single-file standalone executable. See the [Single-File Build Guide](../SINGLE_FILE_BUILD.md) for details.
 
 ### Option 1: Using .NET CLI (Recommended)
 
 ```bash
 # Navigate to the project folder
-cd OutlookExporter
-# or
-cd ScreenCapture
+cd exfil\OutlookExporter
 
-# Build as single-file executable
+# Publish as single-file executable (Debug)
+dotnet publish -c Debug
+
+# Publish as single-file executable (Release)
 dotnet publish -c Release
 
 # Output location:
-# bin\Release\net8.0-windows\win-x64\publish\[AppName].exe
+# bin\Release\net8.0-windows\win-x64\publish\OutlookExporter.exe
 ```
 
 ### Option 2: Using Visual Studio
@@ -53,15 +84,30 @@ dotnet publish -c Release
 2. Build the solution (Ctrl+Shift+B)
 3. Run the application (F5)
 
-### Option 3: Using Build Scripts
+### Option 3: Using Build Scripts (Easiest)
 
 ```bash
-# Build Debug and Release versions
+# Navigate to the project folder
+cd exfil\OutlookExporter
+
+# Build both Debug and Release versions
 build-outlookexporter.bat
 
 # Build and run with arguments
 build-and-run-outlookexporter.bat --help
+build-and-run-outlookexporter.bat --recipients --limit 100
 ```
+
+### Output Locations
+
+After building, find your standalone executable at:
+
+```
+bin\Debug\net8.0-windows\win-x64\publish\OutlookExporter.exe      (Debug build)
+bin\Release\net8.0-windows\win-x64\publish\OutlookExporter.exe    (Release build)
+```
+
+> **✨ No DLLs required!** The executable includes all dependencies. Just copy and run anywhere on Windows x64.
 
 ## Usage
 
@@ -227,6 +273,84 @@ The `--matrix` option displays a subset of fields in a formatted table:
   - Own accounts (emails configured in Outlook) are marked with `*` and highlighted in cyan
   - A legend at the bottom shows the count of own accounts used for export
 
+## Real-World Examples
+
+### Scenario 1: Building a Target List
+
+Extract all contacts and their email addresses:
+
+```bash
+OutlookExporter.exe --csv --json
+```
+
+### Scenario 2: Mapping Communication Patterns
+
+Identify most frequently contacted addresses:
+
+```bash
+OutlookExporter.exe --recipients --limit 500 --all-accounts --matrix
+```
+
+### Scenario 3: Quick Assessment
+
+Display contacts in terminal without creating files:
+
+```bash
+OutlookExporter.exe --matrix
+```
+
+### Scenario 4: Comprehensive Data Export
+
+Export everything from all accounts:
+
+```bash
+# Export contacts
+OutlookExporter.exe --csv --json -o all_contacts
+
+# Export recipients from Inbox
+OutlookExporter.exe --recipients --all-accounts --limit 1000 --csv --json -o inbox_recipients
+
+# Export recipients from Sent Items
+OutlookExporter.exe --recipients --all-accounts --mailfolder "Sent Items" --limit 1000 --csv --json -o sent_recipients
+```
+
+### Scenario 5: Specific Account Analysis
+
+Focus on a single email account:
+
+```bash
+OutlookExporter.exe --recipients --account "work@company.com" --limit 500 --csv --matrix
+```
+
+## Technical Details
+
+### COM Interop
+
+- Uses Microsoft Outlook COM automation
+- Proper COM object cleanup to prevent memory leaks
+- Works whether Outlook is running or not
+- Compatible with all Outlook versions that support COM
+
+### Data Processing
+
+- Deduplicates email addresses (recipients mode)
+- Aggregates contact frequency and latest contact date
+- Resolves Exchange (EX) addresses to SMTP format
+- Handles multiple email accounts in Outlook profile
+
+### File Formats
+
+- **CSV**: UTF-8 with BOM for Excel compatibility
+- **JSON**: UTF-8 with proper escaping
+- **Matrix**: Formatted terminal output with column sizing
+
+### Performance
+
+- Progress indicators for long operations
+- Efficient memory usage with COM object cleanup
+- Limit controls for processing large mailboxes
+- Sorted output for meaningful results
+
 ## Notes
 
 - The application works whether Outlook is open or closed
@@ -243,91 +367,84 @@ The `--matrix` option displays a subset of fields in a formatted table:
 
 ## Troubleshooting
 
-**"Failed to connect to Outlook"**
+### "Failed to connect to Outlook"
+**Solution:**
 - Ensure Microsoft Outlook is installed on your system
 - Make sure you have proper permissions to access Outlook
+- Try running as administrator if permission issues persist
 
-**"Error accessing contacts folder"**
+### "Error accessing contacts folder"
+**Solution:**
 - Verify the folder path is correct using the `--list` option
 - Check that you have access to the specified folder
+- Folder names are case-sensitive
 
-**"Could not find folder for account"**
+### "Could not find folder for account"
+**Solution:**
 - Use `--list-accounts` to see available accounts
 - Folder names may vary by language (e.g., "Sent Items" vs "Verzonden items")
+- Verify the account email address is correct
 
----
+### No data exported
+**Solution:**
+- Check if the contacts folder or mailbox has any items
+- Verify folder permissions
+- Try without specifying a folder to use defaults
 
-# Screen Capture Utility (C#)
+### Exchange addresses not resolved
+**Solution:**
+- This is expected for some Exchange environments
+- The tool tries multiple methods to resolve EX to SMTP
+- Exchange cached mode may affect resolution
 
-A powerful and flexible screen capture utility for Windows that captures screenshots and packages them into ZIP archives.
+## Security Considerations
 
-**Location:** `exfil/ScreenCapture/`
+⚠️ **This tool is designed for post-exploitation scenarios. Use responsibly and only on systems you own or have explicit permission to test.**
 
-## Quick Start
+- Exported data may contain sensitive personal information
+- CSV/JSON files are not encrypted
+- Consider secure deletion of exported files after use
+- Be aware of data protection regulations (GDPR, etc.)
 
-```bash
-# Navigate to ScreenCapture folder
-cd ScreenCapture
+## Integration with AfterShell
 
-# Build the project
-build-screencapture.bat
-
-# Run your first capture
-bin\Release\net8.0-windows\win-x64\publish\ScreenCapture.exe
-
-# Or build and run directly
-build-and-run-screencapture.bat -c 5 -i 2
-```
-
-## Common Commands
-
-```bash
-# Capture a single screenshot
-ScreenCapture.exe
-
-# Capture 5 screenshots, 2 seconds apart
-ScreenCapture.exe -c 5 -i 2
-
-# Capture with 10 second delay
-ScreenCapture.exe -c 3 -d 10 -o delayed.zip
-
-# List available monitors
-ScreenCapture.exe --list-monitors
-
-# Capture from primary monitor only
-ScreenCapture.exe -c 5 --monitor 1
-```
-
-📖 **[Full ScreenCapture Documentation](ScreenCapture/README.md)**
-
----
-
-# Building All Tools
-
-## Quick Build All
+This utility is part of the AfterShell post-exploitation toolkit. It can be integrated with other AfterShell tools:
 
 ```bash
-# From the exfil directory
-build-all.bat
+# Example: Combine with screen capture
+OutlookExporter.exe --recipients --limit 100 -o contacts.csv
+ScreenCapture.exe -c 5 -i 2 -o screens.zip
+# ... additional exfil operations
 ```
 
-This will build both OutlookExporter and ScreenCapture in Debug and Release configurations.
+## Contributing
 
-## Output Locations
+This tool is part of the AfterShell project. Contributions, bug reports, and feature requests are welcome at:
 
-After building, the standalone executables are located at:
-
-```
-OutlookExporter/bin/Release/net8.0-windows/win-x64/publish/OutlookExporter.exe
-ScreenCapture/bin/Release/net8.0-windows/win-x64/publish/ScreenCapture.exe
-```
-
-> **✨ These are standalone single-file executables** - no DLLs required! Just copy the .exe and run it anywhere on Windows x64 systems.
-
-📖 **[Single-File Build Configuration Guide](SINGLE_FILE_BUILD.md)**
-
----
+**GitHub**: https://github.com/Logisek/AfterShell
 
 ## License
 
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
 Same as the parent project.
+
+Copyright (C) 2025 Logisek
+
+## Contact
+
+- **Website**: https://logisek.com
+- **Email**: info@logisek.com
+- **Project**: https://github.com/Logisek/AfterShell
+
+## Changelog
+
+### Version 1.0.0 (2025)
+
+- Initial release
+- Contacts export to CSV/JSON
+- Email recipients export with frequency tracking
+- Multi-account support
+- Exchange address resolution
+- Matrix terminal display
+- Simultaneous multiple output formats
