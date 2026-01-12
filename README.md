@@ -336,59 +336,6 @@ This toolkit is intended for authorized security testing and research purposes o
 
 ---
 
-## Project Structure
-
-```
-AfterShell/
-├── exfil/                                      # Exfiltration tools directory
-│   ├── OutlookExporter/                        # Outlook Data Exporter
-│   │   ├── OutlookExporter.cs                  # Outlook exporter source
-│   │   ├── OutlookExporter.csproj              # Outlook exporter project
-│   │   ├── README.md                           # Detailed Outlook docs
-│   │   ├── build-outlookexporter.bat           # Build script (Debug & Release)
-│   │   └── build-and-run-outlookexporter.bat   # Build & run script
-│   ├── ScreenCapture/                          # Screen Capture Utility
-│   │   ├── ScreenCapture.cs                    # Screen capture source
-│   │   ├── ScreenCapture.csproj                # Screen capture project
-│   │   ├── README.md                           # Detailed screenshot docs
-│   │   ├── build-screencapture.bat             # Build script (Debug & Release)
-│   │   └── build-and-run-screencapture.bat     # Build & run script
-│   ├── build-all.bat                           # Build all projects
-│   ├── build-and-run-all.bat                   # Build & run all projects
-│   ├── SINGLE_FILE_BUILD.md                    # Single-file build guide
-│   └── README.md                               # Exfil tools overview
-├── LICENSE                                     # Project license
-└── README.md                                   # This file
-```
-
----
-
-## Roadmap
-
-### Planned Features
-
-**OutlookExporter:**
-- [ ] Stealth mode (minimal output)
-- [ ] Email content extraction
-- [ ] Attachment enumeration
-- [ ] Calendar export
-- [ ] Notes export
-
-**ScreenCapture:**
-- [ ] Video capture support
-- [ ] ZIP encryption
-- [ ] Window-specific capture
-- [ ] Mouse cursor inclusion/exclusion
-- [ ] Region selection
-
-**General:**
-- [ ] More exfiltration tools
-- [ ] Unified configuration
-- [ ] Batch processing scripts
-- [ ] Remote upload capabilities
-
----
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.

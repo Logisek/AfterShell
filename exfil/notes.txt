@@ -8,4 +8,23 @@ Potential Planned tools for future releases:
 - [ ] **Screenshot Capture** - Periodic or on-demand screen capture
 - [ ] **File Search** - Search for sensitive files (documents, keys, configs)
 
+**OutlookExporter:**
+- [ ] Email content extraction
+- [ ] Attachment enumeration
+- [ ] Calendar export
+- [ ] Notes export
+
+**ScreenCapture:**
+- [ ] Video capture support
+- [ ] ZIP encryption
+- [ ] Window-specific capture
+- [ ] Mouse cursor inclusion/exclusion
+- [ ] Region selection
+
+**General:**
+- [ ] More exfiltration tools
+- [ ] Unified configuration
+- [ ] Batch processing scripts
+- [ ] Remote upload capabilities
+
 ---

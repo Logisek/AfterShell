@@ -124,13 +124,20 @@ namespace ScreenCapture
                 {
                     var capturedFiles = new List<string>();
 
+                    // Calculate padding width for sequence numbers (e.g., 100 screenshots = 3 digits: 001, 002, ...)
+                    int paddingWidth = options.Count.ToString().Length;
+                    
+                    // Get base timestamp for all screenshots in this session
+                    string sessionTimestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
                     // Capture screenshots
                     for (int i = 1; i <= options.Count; i++)
                     {
                         Console.Write($"\rCapturing screenshot {i}/{options.Count}... ");
                         
-                        string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                        string fileName = $"screenshot_{timestamp}.png";
+                        // Use zero-padded sequence number for proper sorting in Windows Explorer
+                        string sequenceNumber = i.ToString($"D{paddingWidth}");
+                        string fileName = $"screenshot_{sessionTimestamp}_{sequenceNumber}.png";
                         string filePath = Path.Combine(tempDir, fileName);
 
                         bool success = capturer.CaptureScreen(filePath, options.Monitor);
