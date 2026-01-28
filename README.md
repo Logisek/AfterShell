@@ -350,7 +350,7 @@ This project is provided for educational and authorized security testing purpose
 
 GNU General Public License v3.0
 
-Copyright (C) 2025 Logisek
+Copyright (C) 2025 Logisek.
 
 ---
 
